@@ -1,4 +1,6 @@
-# Twi
+# Twitter clone
+
+### Used Tech
 
 - react-router-dom
 - react-icons
@@ -6,13 +8,23 @@
 - react-toastify
 - firebase
 - uuid
-
-# clone project features
-
-- sign with gmail
-- publish tweet and media
-- like & unlike tweets
-- protected route (users cannot access tweets if they are not logged in)
-
 - https://flowbite.com/ (for skeleton loading and loading spinner)
+
+---
+
+#### clone project features
+
+- Sign with gmail
+- Publish tweet and media
+- Like & unlike tweets
+- Tweet editing
+- Protected route (users cannot access tweets if they are not logged in)
+
+- Skeleton loading
   ** With skeleton loading, your project looks very modern and users wait patiently while the project is loaded. **
+
+---
+
+# Project Wiew
+
+![](/public/project.png)

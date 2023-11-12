@@ -9,8 +9,6 @@ import { useState } from "react";
 const Form = ({ user }) => {
   const [isLoading, setIsLoading] = useState(false);
 
-  console.log(isLoading);
-
   //collection ref
   const collectionRef = collection(db, "tweets");
 

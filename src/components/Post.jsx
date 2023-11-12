@@ -14,9 +14,11 @@ import {
   doc,
   updateDoc,
 } from "firebase/firestore";
+import Dropdown from "./Dropdown";
 
 const Post = ({ tweet }) => {
   const [isLiked, setIsLiked] = useState(false);
+  const [isEditMode, setIsEditMode] = useState(false);
   //Shows how long ago it was created
   const date = moment(tweet.createdAt?.toDate()).fromNow();
 
@@ -50,6 +52,19 @@ const Post = ({ tweet }) => {
     });
   };
 
+  const handleSave = (e) => {
+    e.preventDefault();
+
+    const tweetRef = doc(db, "tweets", tweet.id);
+
+    updateDoc(tweetRef, {
+      isEdited: true,
+      textContent: e.target[0].value,
+    });
+
+    setIsEditMode(false);
+  };
+
   return (
     <div className="flex gap-3 p-3 border-b[1] border-gray-600">
       <img
@@ -66,17 +81,29 @@ const Post = ({ tweet }) => {
             <p className="text-gray-400">{date}</p>
           </div>
           {tweet.user.id === auth.currentUser.uid && (
-            <div
-              onClick={handleDelete}
-              className="p-2 rounded-full cursor-pointer hover:bg-gray-700"
-            >
-              <BsThreeDots />
-            </div>
+            <Dropdown
+              handleDelete={handleDelete}
+              handleEdit={() => setIsEditMode(true)}
+            />
           )}
         </div>
         {/* middle sec- tweet content */}
         <div className="my-3">
-          <p>{tweet?.textContent}</p>
+          {isEditMode ? (
+            <form onSubmit={handleSave}>
+              <input
+                className="text-black "
+                type="text"
+                defaultValue={tweet.textContent}
+              />
+              <button type="button" onClick={() => setIsEditMode(false)}>
+                Reject
+              </button>
+              <button type="submit">Save</button>
+            </form>
+          ) : (
+            <p>{tweet?.textContent}</p>
+          )}
           {/* if user post photo print the screen */}
           {tweet.imageContent && (
             <img
