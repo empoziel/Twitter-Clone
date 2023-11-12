@@ -1,21 +1,23 @@
-import { useNavigate } from "react-router-dom";
+import Nav from "./../components/Nav";
+import Aside from "./../components/Aside";
+import Main from "./../components/Main";
+import { useEffect, useState } from "react";
+import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "../firebase/config";
-import { signOut } from "firebase/auth";
 
 const Feed = () => {
-  const navigate = useNavigate();
-
+  const [user, setUser] = useState();
+  useEffect(() => {
+    // get active user data from firebase and import to state
+    onAuthStateChanged(auth, (res) => {
+      setUser(res);
+    });
+  }, []);
   return (
-    <div>
-      <button
-        onClick={() => {
-          signOut(auth).then((res) => {
-            navigate("/");
-          });
-        }}
-      >
-        Log out
-      </button>
+    <div className="feed h-screen bg-black overflow-hidden ">
+      <Nav user={user} />
+      <Main user={user} />
+      <Aside />
     </div>
   );
 };

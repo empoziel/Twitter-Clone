@@ -9,3 +9,17 @@ body {
   background-color: #242424;
   min-height: 100vh;
 }
+
+.feed {
+  display: grid;
+  grid-template-columns: 1fr minmax(400px, 600px) 1fr;
+}
+
+main::-webkit-scrollbar {
+  background: #000;
+  width: 5px;
+}
+
+main::-webkit-scrollbar-thumb {
+  background: gray;
+}

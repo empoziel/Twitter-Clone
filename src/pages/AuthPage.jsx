@@ -2,6 +2,7 @@ import {
   createUserWithEmailAndPassword,
   signInWithPopup,
   signInWithEmailAndPassword,
+  sendPasswordResetEmail,
 } from "firebase/auth";
 import { auth, provider } from "../firebase/config";
 import { toast } from "react-toastify";
@@ -11,13 +12,22 @@ import { useEffect, useState } from "react";
 const AuthPage = () => {
   const navigate = useNavigate();
   const [signUp, setSignUp] = useState(false);
+  const [mail, setMail] = useState(" ");
   const [showErr, setShowErr] = useState(false);
+
+  //if users account already open
+  useEffect(() => {
+    if (auth.currentUser) {
+      navigate("/feed");
+    }
+  });
 
   //form sending event
   const handleSubmit = (e) => {
     e.preventDefault();
 
     const email = e.target[0].value;
+    setMail(email);
     const pass = e.target[1].value;
 
     if (signUp) {
@@ -59,6 +69,19 @@ const AuthPage = () => {
     } catch (err) {
       console.log(err);
     }
+  };
+
+  // send reset password mail
+  const handleReset = () => {
+    sendPasswordResetEmail(auth, mail)
+      .then(() => {
+        toast.info(`Password reset mail sent to ${mail}`);
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+
+        toast.error(`Sorry something went wrong :${errorCode}`);
+      });
   };
 
   return (
@@ -110,7 +133,10 @@ const AuthPage = () => {
 
         {/*if pass wrong */}
         {showErr && (
-          <p className="text-red-400 cursor-pointer text-center">
+          <p
+            onClick={handleReset}
+            className="text-red-400 cursor-pointer text-center"
+          >
             Forgot your password ?
           </p>
         )}
