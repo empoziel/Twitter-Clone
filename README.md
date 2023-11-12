@@ -1,5 +1,7 @@
 # Twitter clone
 
+deployed: https://haska-twitter.netlify.app/
+
 ### Used Tech
 
 - react-router-dom
@@ -26,5 +28,5 @@
 ---
 
 # Project Wiew
-
 ![](/public/project.png)
+
