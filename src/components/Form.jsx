@@ -16,24 +16,27 @@ const Form = ({ user }) => {
 
   //add media to storage and get url
   const uploadImage = async (image) => {
-    // if type jpeg - png it works
-    if (image.type === "image/png" || image.type === "image/jpeg") {
-      setIsLoading(true);
-      //get place from storage
-      const fileRef = ref(storage, `${image.name}${v4()}`);
-
-      //upload file
-      const url = await uploadBytes(fileRef, image).then((response) =>
-        getDownloadURL(response.ref)
-      );
-
-      setIsLoading(false);
-
-      return url;
+    if (!image) {
+      return null;
     }
+    //else if (
+    //   image === undefined ||
+    //   image.type !== "image/png" ||
+    //   image.type !== "image/jpeg"
+    // ) {
+    //   toast.info("This media type is not supported (png or jpeg only).");
+    //   return null;
+    //}
+    setIsLoading(true);
+    //get place from storage
+    const fileRef = ref(storage, `${image.name}${v4()}`);
 
-    toast.info("This media type is not supported (png or jpeg only).");
-    return null;
+    //upload file
+    const url = await uploadBytes(fileRef, image).then((response) =>
+      getDownloadURL(response.ref)
+    );
+
+    return url;
   };
 
   const handleSubmit = async (e) => {
@@ -44,13 +47,14 @@ const Form = ({ user }) => {
     const textContent = e.target[0].value;
     const imageContent = e.target[1].files[0];
 
-    const imageUrl = await uploadImage(imageContent);
-
-    if (!textContent && !imageUrl) {
+    if (!textContent && !imageContent) {
       toast.info("Add tweet content!");
       return;
     }
 
+    setIsLoading(true);
+
+    const imageUrl = await uploadImage(imageContent);
     //tweet media
 
     //add tweet to collection
@@ -66,6 +70,8 @@ const Form = ({ user }) => {
       likes: [],
       isEdited: false,
     });
+
+    setIsLoading(false);
 
     //clear form
     e.target[0].value = " ";
